@@ -1,3 +1,5 @@
+import javax.lang.model.util.ElementScanner6;
+
 public class BinaryTree{
   Node root;
 
@@ -64,6 +66,102 @@ public class BinaryTree{
       postOrderTraverseTree(focusNode.rightChild);
       System.out.println(focusNode.toString());
     }
+  }
+
+  public boolean remove(int key)
+  {
+    Node focusNode = root;
+    Node parent = root;
+
+    boolean isItALeftChild = true;
+
+    while(focusNode.key != key)
+    {
+      parent = focusNode;
+
+      if(key < focusNode.key)
+      {
+        isItALeftChild = true;
+        focusNode = focusNode.leftChild;
+      }
+      else
+      {
+        isItALeftChild = false;
+        focusNode = focusNode.rightChild;
+      }
+      if(focusNode == null)
+      return false;
+    }
+    if(focusNode.leftChild == null && focusNode.rightChild == null)
+    {
+      if(focusNode == root)
+      {
+        root = null;
+      }
+      else if(isItALeftChild)
+      {
+        parent.leftChild = null;
+      }
+      else
+      {
+        parent.rightChild = null;
+      }
+    }
+    else if(focusNode.rightChild == null)
+    {
+      if(focusNode == root)
+      root = focusNode.leftChild;
+      else if(isItALeftChild)
+      parent.leftChild = focusNode.leftChild;
+      else
+      parent.rightChild = focusNode.leftChild;
+    }
+    else if(focusNode.leftChild == null)
+    {
+      if(focusNode == root)
+      root = focusNode.rightChild;
+      else if(isItALeftChild)
+      parent.leftChild = focusNode.rightChild;
+      else  
+      parent.rightChild = focusNode.leftChild;
+    }
+    else
+    {
+      Node replacement = getReplacementNode(focusNode);
+      if(focusNode == root)
+      {
+        root = replacement;
+      }
+      else if(isItALeftChild)
+      parent.leftChild = replacement;
+      else
+      parent.rightChild = replacement;
+
+      replacement.leftChild = focusNode.leftChild;
+    }
+    return true;
+  }
+
+  public Node getReplacementNode(Node replacedNode)
+  {
+    Node replacementParent = replacedNode;
+    Node replacement = replacedNode;
+
+    Node focusNode = replacedNode.rightChild;
+
+    while(focusNode != null)
+    {
+      replacementParent = replacement;
+      replacement =focusNode;
+      focusNode = focusNode.leftChild;
+    }
+    if(replacement != replacedNode.rightChild)
+    {
+      replacementParent.leftChild = replacement.rightChild;
+      replacement.rightChild = replacedNode.rightChild;
+    }
+
+    return replacement;
   }
 
   public Node findNode(int key)

@@ -20,5 +20,9 @@ class Main {
 
     System.out.println("Search for 65");
     System.out.println(tree.findNode(65));
+
+    System.out.println("REMOVE KEY 23");
+    tree.remove(23);
+    tree.preorderTraverseTree(tree.root);
   }
 }
