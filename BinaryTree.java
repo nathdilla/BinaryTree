@@ -33,6 +33,7 @@ public class BinaryTree{
             parent.rightChild = newNode;
             return;
           }
+          focusNode.parent = parent;
         }
       }
     }
@@ -185,6 +186,19 @@ public class BinaryTree{
     }
     return focusNode;
   }
+
+  public Node update(int key, int newKey)
+  {
+    Node focusNode = findNode(key);
+    Node parent = focusNode.parent;
+    if (newKey <= parent.key && focusNode == parent.leftChild || 
+    newKey >= parent.key && focusNode == parent.rightChild)
+    {
+      focusNode.key = newKey;
+      return focusNode;
+    }
+    return null;
+  }
 }
 
 class Node {
@@ -193,6 +207,7 @@ class Node {
 
   Node leftChild;
   Node rightChild;
+  Node parent;
 
   Node(int key, String name)
   {
